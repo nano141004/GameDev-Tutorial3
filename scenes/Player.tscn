@@ -1,15 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://ddw5yisdjiqfy"]
 
-[ext_resource type="Texture2D" uid="uid://b83s10q5xdw4w" path="res://assets/playerShip1_blue.png" id="1_rj6ay"]
+[ext_resource type="Texture2D" uid="uid://ofsbv6coxbmq" path="res://assets/kenney_platformercharacters/PNG/Adventurer/Poses/adventurer_stand.png" id="1_4rfml"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dyj5y"]
-size = Vector2(96, 75)
+size = Vector2(61, 92)
 
 [node name="Player" type="CharacterBody2D"]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_rj6ay")
+texture = ExtResource("1_4rfml")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, 0.5)
+position = Vector2(0.5, 9)
 shape = SubResource("RectangleShape2D_dyj5y")

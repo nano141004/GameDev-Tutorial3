@@ -1,39 +1,73 @@
 extends CharacterBody2D
 
-@export var walk_speed = 200
+@export var walk_speed = 300
+@export var dash_speed = 600
+@export var dash_duration = 0.25
 @export var gravity = 400.0
-@export var jump_speed = -200
+@export var jump_speed = -300
 var can_double_jump = false
+
+const DOUBLETAP_DELAY = 0.2
+var last_tap_time = 0.0
+var last_direction = ""
+
+var is_dashing = false
+var dash_timer = 0.0
 
 func _physics_process(delta):
 	velocity.y += delta * gravity
-	
-	# need to know why when i put the 2nd jump handler after the 1st jump handler, it doenst work
-	# and when the 2nd jump handler put before the 1st jump handler, it works (just like what i did below now)
-	
-	#2nd jump
-	if can_double_jump == true and Input.is_action_just_pressed('ui_up'):
+
+	# timer dash
+	if is_dashing:
+		dash_timer -= delta
+		if dash_timer <= 0:
+			is_dashing = false  # Stop dash
+			velocity.x = 0  
+
+	# Double Jump Mechanic
+	# Second Jump
+	if can_double_jump and Input.is_action_just_pressed("ui_up"):
 		velocity.y = jump_speed
 		can_double_jump = false
-	#1st jump
-	if is_on_floor() and Input.is_action_just_pressed('ui_up'):
+	# First Jump
+	if is_on_floor() and Input.is_action_just_pressed("ui_up"):
 		velocity.y = jump_speed
 		can_double_jump = true
-	
-	if Input.is_action_pressed("ui_left"):
-		velocity.x = -walk_speed
-	elif Input.is_action_pressed("ui_right"):
-		velocity.x =  walk_speed
-	else:
-		velocity.x = 0
 		
-	# "move_and_slide" already takes delta time into account.
-	move_and_slide()
+	# Moving down mechanic
+	# moving down faster if down arrow is being pressed while on air
+	if not is_on_floor() and Input.is_action_pressed("ui_down"):
+		velocity.y = walk_speed
+		
 	
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+	# moving left and right
+	if not is_dashing:
+		if Input.is_action_pressed("ui_left"):
+			velocity.x = -walk_speed
+		elif Input.is_action_pressed("ui_right"):
+			velocity.x = walk_speed
+		else:
+			velocity.x = 0
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	move_and_slide()
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		#direction variable to save what inputeventkey just pressed, and also if the pressed key is left/right arrow
+		var direction = ""
+		if event.keycode == KEY_LEFT:
+			direction = "left"
+		elif event.keycode == KEY_RIGHT:
+			direction = "right"
+		
+		if direction != "":
+			var now = Time.get_ticks_msec() / 1000.0  
+			if direction == last_direction and (now - last_tap_time) < DOUBLETAP_DELAY:
+				is_dashing = true
+				dash_timer = dash_duration
+				if direction == "left":
+					velocity.x = -dash_speed
+				else:
+					velocity.x = dash_speed
+			last_tap_time = now
+			last_direction = direction
