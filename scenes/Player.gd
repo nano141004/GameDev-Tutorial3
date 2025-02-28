@@ -18,9 +18,10 @@ var dash_timer = 0.0
 
 var is_crouching = false
 
+
 func _physics_process(delta):
 	velocity.y += delta * gravity
-	
+
 	# timer dash
 	if is_dashing:
 		dash_timer -= delta
@@ -47,28 +48,28 @@ func _physics_process(delta):
 	if not is_dashing:
 		if Input.is_action_pressed("ui_left"):
 			$Sprite2D.flip_h = true
-			if is_on_floor() and Input.is_action_pressed("ui_down"): #crouching
+			if is_on_floor() and Input.is_action_pressed("ui_down"):  #crouching
 				velocity.x = -cruch_walk_speed
 				$AnimationPlayer.play("crouch_walk")
 			else:
 				velocity.x = -walk_speed
 				$AnimationPlayer.play("walk")
-				
+
 		elif Input.is_action_pressed("ui_right"):
 			$Sprite2D.flip_h = false
-			if is_on_floor() and Input.is_action_pressed("ui_down"): #crouching
+			if is_on_floor() and Input.is_action_pressed("ui_down"):  #crouching
 				velocity.x = cruch_walk_speed
 				$AnimationPlayer.play("crouch_walk")
-			else: 
+			else:
 				velocity.x = walk_speed
 				$AnimationPlayer.play("walk")
-				
+
 		#idle
 		else:
 			velocity.x = 0
-			if is_on_floor() and Input.is_action_pressed("ui_down"): #crouching
+			if is_on_floor() and Input.is_action_pressed("ui_down"):  #crouching
 				$AnimationPlayer.play("crouch_idle")
-			else: #standing
+			else:  #standing
 				$AnimationPlayer.play("idle")
 
 	move_and_slide()
