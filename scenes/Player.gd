@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const DOUBLETAP_DELAY = 0.2
+
 @export var walk_speed = 300
 @export var dash_speed = 600
 @export var dash_duration = 0.25
@@ -9,10 +11,8 @@ extends CharacterBody2D
 
 var can_double_jump = false
 
-const DOUBLETAP_DELAY = 0.2
 var last_tap_time = 0.0
 var last_direction = ""
-
 var is_dashing = false
 var dash_timer = 0.0
 
@@ -77,7 +77,8 @@ func _physics_process(delta):
 
 func _input(event):
 	if event is InputEventKey and event.is_pressed() and not event.is_echo():
-		#direction variable to save what inputeventkey just pressed, and also if the pressed key is left/right arrow
+		#direction variable to save what inputeventkey just pressed,
+		#and also if the pressed key is left/right arrow
 		var direction = ""
 		if event.keycode == KEY_LEFT:
 			direction = "left"

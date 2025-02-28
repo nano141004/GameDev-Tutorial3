@@ -5,7 +5,7 @@
 - https://www.youtube.com/watch?v=Hpbn-w7H2V4&ab_channel=KaanAlpar  : tutorial for making crouching mechanic (animations too)
 
 ## Penjelesan pengerjaan implementasi fitur:
-- **Fitur double jump: **
+- **Fitur double jump:**
   
     Terdapat var `can_double_jump`, yang mulanya bernilai false, dan jika player menekan arrow up pertama kali dari landasan untuk melakukan jump, var `can_double_jump` akan menjadi true. Player dapat melakukan jump lagi jika menekan arrow up, dan setelah itu var `can_double_jump` akan menjadi false kembali(mencegah bisa lebih dari 2 kali jump).
 
